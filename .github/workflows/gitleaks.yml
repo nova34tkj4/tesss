@@ -1,0 +1,21 @@
+name: Block Direct Push to Main
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  block:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        
+      - name: Block Direct Push
+        run: |
+          echo "Direct pushes to the main branch are not allowed. Reverting the push."
+          git config --global user.email "novahariyakusuma@gmail.com"
+          git config --global user.name "nova hariya"
+          git revert HEAD --no-edit
+          git push https://x-access-token:${{ secrets.TOKENGITHUB }}@github.com/${{ github.repository }} HEAD:main --force
